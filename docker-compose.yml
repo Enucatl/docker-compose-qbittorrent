@@ -8,7 +8,7 @@ services:
     hostname: qbittorrent
     environment:
       - PUID=1000
-      - PGID=1000
+      - PGID=1000                                                             
       - TZ=Europe/Zurich
       - WEBUI_PORT=8080
     volumes:
@@ -19,6 +19,12 @@ services:
       - 6881:6881/udp
       - 8080:8080
     restart: unless-stopped
+    healthcheck:
+      test: curl --insecure --fail https://localhost:8080 || exit 1
+      interval: 600s
+      retries: 5
+      start_period: 60s
+      timeout: 10s
                                                                             
 volumes:
   config:
