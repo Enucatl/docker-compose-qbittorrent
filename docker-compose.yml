@@ -1,20 +1,23 @@
 version: "3"
 services:
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent
-    container_name: qbittorrent
-    hostname: qbittorrent
+    image: dyonr/qbittorrentvpn:latest
     environment:
       - PUID=1000
       - PGID=1000                                                             
+      - VPN_ENABLED=yes
+      - VPN_TYPE=wireguard
       - TZ=Europe/Zurich
-      - WEBUI_PORT=8080
+      - ENABLE_SSL=false
+      - INSTALL_PYTHON3=yes
+      - LAN_NETWORK=192.168.0.0/24
+      - LEGACY_IPTABLES=no
     volumes:
       - config:/config
       - downloads:/downloads
-    ports:
-      - 6881:6881
-      - 6881:6881/udp
+    expose:
+      - 8080
+      - 6881
     restart: unless-stopped
     networks:
       - traefik_proxy
