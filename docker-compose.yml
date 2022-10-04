@@ -5,6 +5,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000                                                             
+      - UMASK=007
       - VPN_ENABLED=yes
       - VPN_TYPE=wireguard
       - TZ=Europe/Zurich
@@ -19,10 +20,10 @@ services:
       - 8080
       - 6881
     restart: unless-stopped
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
     networks:
       - traefik_proxy
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.nuc10i7fnh.home.arpa`)"
