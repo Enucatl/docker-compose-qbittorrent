@@ -15,6 +15,7 @@ services:
       - INSTALL_PYTHON3=yes
       - LAN_NETWORK=192.168.2.0/24
       - LEGACY_IPTABLES=no
+      - NAME_SERVERS
     volumes:
       - config:/config
       - downloads:/downloads
@@ -34,7 +35,7 @@ services:
       - "traefik.http.routers.qbittorrent.middlewares=authelia@docker,secured@file"
       - "traefik.http.routers.qbittorrent.service=qbittorrent"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
-                                                                            
+
 volumes:
   config:
   downloads:
