@@ -28,6 +28,7 @@ services:
     networks:
       - traefik_proxy
     labels:
+      - "checkmk_monitor=true"
       - "traefik.enable=true"
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.nuc10i7fnh.home.arpa`)"
       - "traefik.http.routers.qbittorrent.entrypoints=https"
