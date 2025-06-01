@@ -6,6 +6,7 @@ services:
       - PGID=1000                                                             
       - TZ=Europe/Zurich
     volumes:
+      - /nfs_exports/home/user/docker/qbittorrent/qbittorrent.conf:/config/qBittorrent/qBittorrent.conf
       - config:/config
       - downloads:/downloads
     restart: unless-stopped
