@@ -1,4 +1,3 @@
-version: "3"
 services:
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -25,12 +24,12 @@ services:
       - "traefik.http.routers.qbittorrent.service=qbittorrent"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
     networks:
-      - qbittorrent-network
+      - traefik_proxy
 
 volumes:
   config:
   downloads:
 
 networks:
-  qbittorrent-network:
-    enable_ipv6: true
+  traefik_proxy:
+    external: true
