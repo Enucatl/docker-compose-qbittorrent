@@ -1,11 +1,14 @@
 services:
   qbittorrent:
     image: "ghcr.io/11notes/qbittorrent:5"
+    read_only: true
+    security_opt:
+      - "no-new-privileges=true"
     environment:
       - TZ=Europe/Zurich
     volumes:
-      - /nfs_exports/home/user/docker/qbittorrent/qbittorrent.conf:/config/qBittorrent/qBittorrent.conf
-      - config:/config
+      - /nfs_exports/home/user/docker/qbittorrent/qbittorrent.conf:/qbittorrent/etc/qBittorrent.conf
+      - config:/qbittorrent/etc
       - downloads:/downloads
     restart: unless-stopped
     sysctls:
