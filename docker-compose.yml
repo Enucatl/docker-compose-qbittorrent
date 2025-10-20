@@ -1,7 +1,9 @@
 services:
   qbittorrent:
-    image: "ghcr.io/11notes/qbittorrent:5"
+    image: lscr.io/linuxserver/qbittorrent:latest
     environment:
+      - PUID=1000
+      - PGID=1000                                                             
       - TZ=Europe/Zurich
     volumes:
       - /nfs_exports/home/user/docker/qbittorrent/qbittorrent.conf:/config/qBittorrent/qBittorrent.conf
