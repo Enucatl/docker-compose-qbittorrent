@@ -1,35 +1,44 @@
+x-lockdown: &lockdown
+  # prevents write access to the image itself
+  read_only: true
+  # prevents any process within the container to gain more privileges
+  security_opt:
+    - "no-new-privileges=true"
+
 services:
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: "11notes/qbittorrent:5"
+    <<: *lockdown
     environment:
-      - PUID=1000
-      - PGID=1000                                                             
-      - TZ=Europe/Zurich
+      TZ: "Europe/Zurich"
+      QBITTORRENT_USER_AGENT: "11notes/qbittorrent"
     volumes:
-      - /nfs_exports/home/user/docker/qbittorrent/qbittorrent.conf:/config/qBittorrent/qBittorrent.conf
-      - config:/config
-      - downloads:/downloads
-    restart: unless-stopped
+      - "qbittorrent.etc:/qbittorrent/etc"
+      - "qbittorrent.var:/qbittorrent/var"
+      - "/scratch/qbittorrent:/downloads"
+      - "./qbittorrent.conf:/qbittorrent/etc/qBittorrent.conf"
+    ports:
+      - "6881:6881/tcp"
+      - "6881:6881/udp"
+    networks:
+      - traefik_proxy
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
-    ports:
-      - 6881:6881
-      - 6881:6881/udp
+    restart: unless-stopped
     labels:
       - "checkmk_monitor=true"
       - "traefik.enable=true"
-      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.nuc10i7fnh.home.arpa`)"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.${DOCKER_DOMAIN}`)"
       - "traefik.http.routers.qbittorrent.entrypoints=https"
       - "traefik.http.routers.qbittorrent.tls=true"
       - "traefik.http.routers.qbittorrent.middlewares=authelia@docker,secured@file"
       - "traefik.http.routers.qbittorrent.service=qbittorrent"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
-    networks:
-      - traefik_proxy
+
 
 volumes:
-  config:
-  downloads:
+  qbittorrent.etc:
+  qbittorrent.var:
 
 networks:
   traefik_proxy:
