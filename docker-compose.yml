@@ -20,6 +20,7 @@ services:
     ports:
       - "6881:6881/tcp"
       - "6881:6881/udp"
+      - "9000:9000"
     networks:
       - traefik_proxy
     sysctls:
