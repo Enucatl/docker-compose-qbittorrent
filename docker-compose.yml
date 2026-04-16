@@ -3,7 +3,7 @@ services:
     image: "11notes/qbittorrent:5"
     extends:
       file: ../compose-security-baseline/hardening.yml
-      service: readonly-medium
+      service: hardened-medium
     cpu_shares: 256
     environment:
       TZ: "Europe/Zurich"
