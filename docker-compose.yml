@@ -1,20 +1,18 @@
 services:
   config:
-    image: "busybox:1.37.0"
+    image: "python:3.14-slim"
     extends:
       file: ../compose-security-baseline/hardening.yml
       service: hardened-tiny
-    network_mode: none
+    networks:
+      - traefik_proxy
+    user: "1000:1000"
     command:
-      - sh
-      - -c
-      - |
-        cp /source/qBittorrent.conf /target/qBittorrent.conf
-        chown 1000:1000 /target/qBittorrent.conf
-        chmod 0644 /target/qBittorrent.conf
-        rm -f /target/qBittorrent_new.conf
+      - python
+      - /scripts/generate_qbittorrent_config.py
     volumes:
       - "./qbittorrent.conf:/source/qBittorrent.conf:ro"
+      - "./generate_qbittorrent_config.py:/scripts/generate_qbittorrent_config.py:ro"
       - "qbittorrent.etc:/target"
     restart: "no"
 
